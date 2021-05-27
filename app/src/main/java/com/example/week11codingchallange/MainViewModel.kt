@@ -4,13 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class MainViewModel: ViewModel() {
-    var liveFoundWordsTable = MutableLiveData<MutableList<Words>>()
+    var liveFoundWordsTable = MutableLiveData<MutableList<String>>()
 
     init {
-       liveFoundWordsTable.postValue(emptyList<Words>().toMutableList())
+       liveFoundWordsTable.postValue(emptyList<String>().toMutableList())
     }
 
-    fun setLiveFoundWordstable(words:List<Words>){
+    fun setLiveFoundWordstable(words:List<String>){
         liveFoundWordsTable.postValue(words.toMutableList())
     }
 }

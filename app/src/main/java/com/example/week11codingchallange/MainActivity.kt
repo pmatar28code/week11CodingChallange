@@ -25,8 +25,9 @@ class MainActivity : AppCompatActivity() {
     companion object {
         var alphabetList = listOf<String>("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z")
         var bagMap = mutableMapOf("A" to 9, "B" to 2, "C" to 2, "D" to 4, "E" to 12, "F" to 2, "G" to 3, "H" to 2, "I" to 9, "J" to 1, "K" to 1, "L" to 4, "M" to 2, "N" to 6, "O" to 8, "P" to 2, "Q" to 1, "R" to 6, "S" to 4, "T" to 6, "U" to 4, "V" to 2, "W" to 2, "X" to 1, "Y" to 2, "Z" to 1)
-        var listOfFoundWords = mutableListOf<String>()
+        var listOfFoundWords = mutableListOf<Words>()
         var lettersSelectedFromBagList = mutableListOf<String>()
+
 
 
         private const val DATABASE_NAME = "Pedro-Database"
@@ -36,7 +37,28 @@ class MainActivity : AppCompatActivity() {
     var listOfWordsFromDatabase = emptyList<Words>()
     val wordsAdapter = WordsAdapter()
    lateinit var mainViewModel: MainViewModel
-   // var foundWords= mutableListOf<Words>()
+    var words = emptyList<Words>()
+    var stringLettersBag =""
+    var one = ""
+    var two = ""
+    var three = ""
+    var four = ""
+    var five = ""
+    var six = ""
+    var seven =""
+    var eight = ""
+    var nine = ""
+    var ten = ""
+    var eleven = ""
+    var twelve = ""
+    var thirteen = ""
+    var fourteen = ""
+    var fifteen = ""
+    var sixteen = ""
+    var seventeen = ""
+    var eighteen = ""
+    var nineteen = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             if(it.isEmpty()){
                 binding.bagLetters.text = ""
             }else{
-                binding.bagLetters.text = it[0].word
+                binding.bagLetters.text = it.toString()
             }
 
         })
@@ -62,7 +84,9 @@ class MainActivity : AppCompatActivity() {
         ).fallbackToDestructiveMigration()
             .build()
 
-        getWordsDatabase()
+        getRandomLetterAndSubstract()
+        lettersFromBagToString()
+        //getWordsDatabase()
         getDictionaryList(fileName)
 
         binding.recycler.apply {
@@ -74,15 +98,20 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+    }
+
     override fun onResume() {
         super.onResume()
         AsyncTask.execute {
-            val words = database?.funDao()?.getAll()
-            Repository.repoListWords = database?.funDao()?.findWord("abiogenic")!!
+            //words = database?.funDao()?.getAll()?: emptyList()
+            listOfFoundWords = database?.funDao()?.findWordExclude(one,two,three,four,five,six,seven,eight,nine,ten,eleven,twelve,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,nineteen)!!
             runOnUiThread {
                 //Toast.makeText(this,"from search: ${Repository().repoListWords?.get(0)?.word}",Toast.LENGTH_LONG).show()
-                mainViewModel.setLiveFoundWordstable(Repository.repoListWords)
-                wordsAdapter.submitList(words)
+                mainViewModel.setLiveFoundWordstable(lettersSelectedFromBagList)
+                wordsAdapter.submitList(listOfFoundWords)
             }
         }
     }
@@ -108,4 +137,88 @@ class MainActivity : AppCompatActivity() {
         var newList = list
         return newList.random()
     }
+
+    fun getRandomLetterAndSubstract() {
+        var counter = 0
+        while (counter < 7) {
+            var randomLetter = getRandomLetter(alphabetList)
+            for ((k, v) in bagMap) {
+                if (k == randomLetter) {
+                    if (bagMap[k] == 0) {
+                    } else {
+                        lettersSelectedFromBagList.add(k)
+                        bagMap[k]?.minus(1).let {
+                            if (it != null) {
+                                bagMap[k] = it
+                                ++counter
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        counter = 0
+        Toast.makeText(this,"list of letters selected $lettersSelectedFromBagList",Toast.LENGTH_LONG).show()
+    }
+
+    fun lettersFromBagToString(){
+        var newAlph = alphabetList.toMutableList()
+        for(letter in lettersSelectedFromBagList){
+            if(newAlph.contains(letter)){
+                newAlph.remove(letter)
+            }
+        }
+        for(letter in newAlph){
+            if(one=="") {
+                one = "%"+letter.toLowerCase()+"%"
+            }else if(two ==""){
+                two = "%"+letter.toLowerCase()+"%"
+            }else if(three ==""){
+                three = "%"+letter.toLowerCase()+"%"
+            }else if(four ==""){
+                four = "%"+letter.toLowerCase()+"%"
+            }else if(five ==""){
+                five = "%"+letter.toLowerCase()+"%"
+            }else if(six == ""){
+                six = "%"+letter.toLowerCase()+"%"
+            }else if(seven==""){
+                seven = "%"+letter.toLowerCase()+"%"
+            }else if(eight ==""){
+                eight = "%"+letter.toLowerCase()+"%"
+            }else if(nine ==""){
+                nine = "%"+letter.toLowerCase()+"%"
+            }else if(ten ==""){
+                ten = "%"+letter.toLowerCase()+"%"
+            }else if(eleven ==""){
+                eleven = "%"+letter.toLowerCase()+"%"
+            }else if(twelve == ""){
+                twelve = "%"+letter.toLowerCase()+"%"
+            }else if(thirteen==""){
+                thirteen = "%"+letter.toLowerCase()+"%"
+            }else if(fourteen ==""){
+                fourteen = "%"+letter.toLowerCase()+"%"
+            }else if(fifteen ==""){
+                fifteen = "%"+letter.toLowerCase()+"%"
+            }else if(sixteen ==""){
+                sixteen = "%"+letter.toLowerCase()+"%"
+            }else if(seventeen ==""){
+                seventeen = "%"+letter.toLowerCase()+"%"
+            }else if(eighteen == ""){
+                eighteen = "%"+letter.toLowerCase()+"%"
+            }else if(nineteen==""){
+                nineteen = "%"+letter.toLowerCase()+"%"
+            }
+        }
+
+
+
+
+
+        //Toast.makeText(this,"StringLettersBag $three",Toast.LENGTH_LONG).show()
+
+    }
+        //stringLettersBag = stringLettersBag.dropLast(1)
+
+
+
 }
