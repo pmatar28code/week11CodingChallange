@@ -7,7 +7,7 @@ import java.net.URL
 import java.net.URLConnection
 
 class Async() : AsyncTask<String, Int, Void>() {
-    var resultEnd:String ? =Repository().result
+    var resultEnd:String ? =Repository.result
     override fun doInBackground(vararg params: String?): Void? {
 
         var url =
@@ -26,7 +26,7 @@ class Async() : AsyncTask<String, Int, Void>() {
         var testomg: String?
         testomg = bo.toString()
         resultEnd = testomg
-        Repository().result = testomg!!
+        Repository.result = testomg!!
         //Log.v("REPO LINE", "$resultEnd")
         Log.v("LINE", "$testomg")
 
