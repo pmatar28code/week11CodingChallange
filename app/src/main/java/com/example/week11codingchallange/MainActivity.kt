@@ -28,8 +28,6 @@ class MainActivity : AppCompatActivity() {
         var listOfFoundWords = mutableListOf<Words>()
         var lettersSelectedFromBagList = mutableListOf<String>()
 
-
-
         private const val DATABASE_NAME = "Pedro-Database"
     }
 
@@ -39,6 +37,7 @@ class MainActivity : AppCompatActivity() {
    lateinit var mainViewModel: MainViewModel
     var words = emptyList<Words>()
     var stringLettersBag =""
+    var zero =""
     var one = ""
     var two = ""
     var three = ""
@@ -77,6 +76,9 @@ class MainActivity : AppCompatActivity() {
         })
         val fileName = "dictionary.txt"
 
+        applicationContext.deleteDatabase(DATABASE_NAME)
+
+
         database = Room.databaseBuilder(
             applicationContext,
             Database::class.java,
@@ -96,18 +98,23 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
-
+        lettersSelectedFromBagList.clear()
+        listOfFoundWords.clear()
+        applicationContext.deleteDatabase(DATABASE_NAME)
+        database?.clearAllTables()
     }
 
     override fun onResume() {
         super.onResume()
         AsyncTask.execute {
+            listOfFoundWords.clear()
             //words = database?.funDao()?.getAll()?: emptyList()
-            listOfFoundWords = database?.funDao()?.findWordExclude(one,two,three,four,five,six,seven,eight,nine,ten,eleven,twelve,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,nineteen)!!
+            listOfFoundWords = database?.funDao()?.findWordExclude(zero,one,two,three,four,five,six,seven,eight,nine,ten,eleven,twelve,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,nineteen)!!
             runOnUiThread {
                 //Toast.makeText(this,"from search: ${Repository().repoListWords?.get(0)?.word}",Toast.LENGTH_LONG).show()
                 mainViewModel.setLiveFoundWordstable(lettersSelectedFromBagList)
@@ -169,7 +176,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
         for(letter in newAlph){
-            if(one=="") {
+            if(zero ==""){
+                zero = "%"+letter.toLowerCase()+"%"
+            }
+            else if(one=="") {
                 one = "%"+letter.toLowerCase()+"%"
             }else if(two ==""){
                 two = "%"+letter.toLowerCase()+"%"
@@ -191,7 +201,7 @@ class MainActivity : AppCompatActivity() {
                 ten = "%"+letter.toLowerCase()+"%"
             }else if(eleven ==""){
                 eleven = "%"+letter.toLowerCase()+"%"
-            }else if(twelve == ""){
+            }else if(twelve ==""){
                 twelve = "%"+letter.toLowerCase()+"%"
             }else if(thirteen==""){
                 thirteen = "%"+letter.toLowerCase()+"%"
@@ -203,22 +213,11 @@ class MainActivity : AppCompatActivity() {
                 sixteen = "%"+letter.toLowerCase()+"%"
             }else if(seventeen ==""){
                 seventeen = "%"+letter.toLowerCase()+"%"
-            }else if(eighteen == ""){
+            }else if(eighteen ==""){
                 eighteen = "%"+letter.toLowerCase()+"%"
             }else if(nineteen==""){
                 nineteen = "%"+letter.toLowerCase()+"%"
             }
         }
-
-
-
-
-
-        //Toast.makeText(this,"StringLettersBag $three",Toast.LENGTH_LONG).show()
-
     }
-        //stringLettersBag = stringLettersBag.dropLast(1)
-
-
-
 }
