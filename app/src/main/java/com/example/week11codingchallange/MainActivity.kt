@@ -6,9 +6,11 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.loader.content.AsyncTaskLoader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.week11codingchallange.databinding.ActivityMainBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 //var alphabetList = listOf<String>("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z")
 //A-9, B-2, C-2, D-4, E-12, F-2, G-3, H-2, I-9, J-1, K-1, L-4, M-2, N-6, O-8, P-2, Q-1, R-6, S-4, T-6, U-4, V-2, W-2, X-1, Y-2, Z-1
@@ -97,6 +99,17 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
         }
 
+        binding.floatingActionButton.setOnClickListener {
+            AsyncTask.execute {
+                applicationContext.deleteDatabase(DATABASE_NAME)
+                database?.clearAllTables()
+            }
+            restart()
+            mainViewModel.setLiveFoundWordstable(lettersSelectedFromBagList)
+            recreate()
+
+        }
+
 
     }
 
@@ -104,8 +117,8 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         lettersSelectedFromBagList.clear()
         listOfFoundWords.clear()
-        applicationContext.deleteDatabase(DATABASE_NAME)
-        database?.clearAllTables()
+        //applicationContext.deleteDatabase(DATABASE_NAME)
+       // database?.clearAllTables()
     }
 
     override fun onResume() {
@@ -344,6 +357,44 @@ class MainActivity : AppCompatActivity() {
 
 
             }
+
+    }
+
+    fun restart(){
+        listForString.clear()
+        check = false
+        newWord = ""
+        wordLenght = 0
+
+        mapOfLettersBagTimes.clear()
+
+        lettersSelectedFromBagList.clear()
+        wordsFormedWithLettersFromTheBagWithRemove.clear()
+        listOfFoundWords.clear()
+        var stringLettersBag = ""
+        var zero = ""
+        var one = ""
+        var two = ""
+        var three = ""
+        var four = ""
+        var five = ""
+        var six = ""
+        var seven = ""
+        var eight = ""
+        var nine = ""
+        var ten = ""
+        var eleven = ""
+        var twelve = ""
+        var thirteen = ""
+        var fourteen = ""
+        var fifteen = ""
+        var sixteen = ""
+        var seventeen = ""
+        var eighteen = ""
+        var nineteen = ""
+
+
+
 
     }
 
